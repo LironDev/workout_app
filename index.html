@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Age-adapted fitness and nutrition for the whole family. Personalized workouts, meal plans, streaks and badges.">
+  <meta name="theme-color" content="#6C63FF">
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FitLife">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/icon-512.png">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="FitLife — Fitness & Nutrition">
+  <meta property="og:description" content="Personalized workouts and nutrition for the whole family.">
+  <meta property="og:type" content="website">
+
+  <title>FitLife — Fitness &amp; Nutrition</title>
+
+  <!-- CSS (order matters: tokens → base → layout → components → views → animations) -->
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/layout.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/views.css">
+  <link rel="stylesheet" href="./css/animations.css">
+
+  <style>
+    /* Inline critical styles for initial load (prevents FOUC) */
+    #app { min-height: 100dvh; }
+    #loading-screen {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(160deg, #6C63FF 0%, #4ECDC4 100%);
+      color: #fff; gap: 16px; z-index: 9999;
+      transition: opacity 0.4s ease;
+    }
+    #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+    #loading-screen .logo { font-size: 4rem; animation: pulse 1.5s ease infinite; }
+    #loading-screen h1 { font-size: 1.75rem; font-weight: 700; }
+    #loading-screen p { opacity: 0.8; font-size: 0.875rem; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+  </style>
+</head>
+<body>
+
+  <!-- Splash Screen -->
+  <div id="loading-screen" aria-hidden="true">
+    <div class="logo">🏋️‍♂️</div>
+    <h1>FitLife</h1>
+    <p>Loading your fitness journey…</p>
+    <div class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:#fff;margin-top:8px"></div>
+  </div>
+
+  <!-- App Shell -->
+  <div id="app">
+
+    <!-- =============================================
+         VIEW: ONBOARDING
+         ============================================= -->
+    <section
+      id="view-onboarding"
+      class="view"
+      aria-hidden="true"
+      aria-label="Onboarding"
+    >
+      <!-- Rendered by onboarding.js mount() -->
+    </section>
+
+    <!-- =============================================
+         VIEW: DASHBOARD
+         ============================================= -->
+    <section
+      id="view-dashboard"
+      class="view"
+      aria-hidden="true"
+      aria-label="Dashboard"
+    >
+      <!-- Rendered by dashboard.js mount() -->
+    </section>
+
+    <!-- =============================================
+         VIEW: WORKOUT PLAYER
+         ============================================= -->
+    <section
+      id="view-workout"
+      class="view"
+      aria-hidden="true"
+      aria-label="Workout Player"
+    >
+      <!-- Rendered by workout.js mount() -->
+    </section>
+
+    <!-- =============================================
+         VIEW: NUTRITION
+         ============================================= -->
+    <section
+      id="view-nutrition"
+      class="view"
+      aria-hidden="true"
+      aria-label="Nutrition"
+    >
+      <!-- Rendered by nutrition.js mount() -->
+    </section>
+
+    <!-- =============================================
+         VIEW: PROFILES (Family Mode)
+         ============================================= -->
+    <section
+      id="view-profiles"
+      class="view"
+      aria-hidden="true"
+      aria-label="Family Profiles"
+    >
+      <!-- Rendered by profiles.js mount() -->
+    </section>
+
+    <!-- =============================================
+         VIEW: BADGES & ACHIEVEMENTS
+         ============================================= -->
+    <section
+      id="view-badges"
+      class="view"
+      aria-hidden="true"
+      aria-label="Badges and Achievements"
+    >
+      <!-- Rendered by badges.js mount() -->
+    </section>
+
+    <!-- Global: Modal Root -->
+    <div id="modal-root" role="dialog" aria-live="polite"></div>
+
+    <!-- Global: Toast Notifications -->
+    <div id="toast-root" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- PWA Install Prompt (hidden until browser fires beforeinstallprompt) -->
+    <button
+      id="install-pwa-btn"
+      class="btn btn--primary"
+      style="
+        display:none;
+        position:fixed;
+        bottom:calc(var(--nav-height) + 12px);
+        right:16px;
+        z-index:var(--z-overlay);
+        box-shadow:var(--shadow-lg);
+      "
+      onclick="window.triggerPWAInstall()"
+      aria-label="Install FitLife app"
+    >
+      📲 Install App
+    </button>
+  </div>
+
+  <!-- App Entry Point (ES Module) -->
+  <script type="module" src="./js/main.js"></script>
+
+  <!-- Remove loading screen once app mounts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Give the module a moment to boot then fade out splash
+      requestAnimationFrame(function() {
+        setTimeout(function() {
+          var splash = document.getElementById('loading-screen');
+          if (splash) {
+            splash.classList.add('fade-out');
+            setTimeout(function() { splash.remove(); }, 450);
+          }
+        }, 600);
+      });
+    });
+  </script>
+
+  <!-- No-JS fallback -->
+  <noscript>
+    <div style="
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:100vh;gap:16px;padding:32px;text-align:center;
+      font-family:system-ui,sans-serif;
+    ">
+      <div style="font-size:3rem">🏋️‍♂️</div>
+      <h1>FitLife requires JavaScript</h1>
+      <p>Please enable JavaScript in your browser to use FitLife.</p>
+    </div>
+  </noscript>
+
+</body>
+</html>

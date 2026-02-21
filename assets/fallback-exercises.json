@@ -1,0 +1,400 @@
+{
+  "bodyweight": [
+    {
+      "id": "fb-001", "source": "fallback", "name": "Push-Up",
+      "description": "A classic upper-body exercise. Start in a high plank with hands shoulder-width apart. Lower your chest to the floor keeping your body straight, then push back up.",
+      "category": { "id": 11, "name": "Chest" },
+      "muscles": [{ "id": 4, "name": "Pectoralis major" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "💪",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-002", "source": "fallback", "name": "Bodyweight Squat",
+      "description": "Stand with feet shoulder-width apart. Lower yourself as if sitting in a chair until thighs are parallel to the floor, then stand back up.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [{ "id": 8, "name": "Gluteus maximus" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🦵",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-003", "source": "fallback", "name": "Plank",
+      "description": "Support your body on forearms and toes. Keep a straight line from head to heels. Engage core and hold the position.",
+      "category": { "id": 10, "name": "Abs" },
+      "muscles": [{ "id": 6, "name": "Rectus abdominis" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🏋️",
+      "ageOk": true, "highImpact": false, "timed": true
+    },
+    {
+      "id": "fb-004", "source": "fallback", "name": "Glute Bridge",
+      "description": "Lie on your back, knees bent, feet flat. Push through heels to lift hips until body forms a straight line from shoulders to knees. Squeeze glutes at the top.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 8, "name": "Gluteus maximus" }],
+      "musclesSecondary": [{ "id": 11, "name": "Hamstrings" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🍑",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-005", "source": "fallback", "name": "Mountain Climber",
+      "description": "Start in a high plank. Drive one knee toward your chest, then quickly switch legs in a running motion. Keep hips level throughout.",
+      "category": { "id": 15, "name": "Cardio" },
+      "muscles": [{ "id": 6, "name": "Rectus abdominis" }],
+      "musclesSecondary": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "⛰️",
+      "ageOk": true, "highImpact": true
+    },
+    {
+      "id": "fb-006", "source": "fallback", "name": "Tricep Dip (Chair)",
+      "description": "Sit on the edge of a stable chair. Hands grip the edge beside your hips. Slide forward, then lower yourself by bending elbows to 90°. Push back up.",
+      "category": { "id": 8, "name": "Arms" },
+      "muscles": [{ "id": 5, "name": "Triceps brachii" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🪑",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-007", "source": "fallback", "name": "Superman Hold",
+      "description": "Lie face down on the floor. Simultaneously lift your arms, chest, and legs off the ground. Hold briefly, then lower with control.",
+      "category": { "id": 12, "name": "Back" },
+      "muscles": [{ "id": 9, "name": "Erector spinae" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🦸",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-008", "source": "fallback", "name": "High Knees",
+      "description": "Stand in place and run, bringing knees up to hip height. Pump arms in rhythm. Keep a steady, quick pace for cardio benefit.",
+      "category": { "id": 15, "name": "Cardio" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🏃",
+      "ageOk": true, "highImpact": true
+    },
+    {
+      "id": "fb-009", "source": "fallback", "name": "Shoulder Tap",
+      "description": "Start in a high plank. Lift one hand to tap the opposite shoulder while keeping hips still. Alternate sides in a controlled manner.",
+      "category": { "id": 13, "name": "Shoulders" },
+      "muscles": [{ "id": 2, "name": "Anterior deltoid" }],
+      "musclesSecondary": [{ "id": 6, "name": "Rectus abdominis" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "👐",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-010", "source": "fallback", "name": "Reverse Crunch",
+      "description": "Lie on your back with knees bent at 90°. Engage abs to curl knees toward your chest, lifting hips slightly off the floor. Lower slowly with control.",
+      "category": { "id": 10, "name": "Abs" },
+      "muscles": [{ "id": 6, "name": "Rectus abdominis" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🔄",
+      "ageOk": true, "highImpact": false
+    }
+  ],
+  "home_gym": [
+    {
+      "id": "fb-011", "source": "fallback", "name": "Dumbbell Curl",
+      "description": "Stand with dumbbells at your sides, palms forward. Curl both weights up toward your shoulders, keeping elbows at your sides. Lower slowly.",
+      "category": { "id": 8, "name": "Arms" },
+      "muscles": [{ "id": 1, "name": "Biceps brachii" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "🏋️",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-012", "source": "fallback", "name": "Dumbbell Goblet Squat",
+      "description": "Hold one dumbbell vertically at chest height. Squat until thighs are parallel to the floor, keeping chest up and knees tracking over toes.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [{ "id": 8, "name": "Gluteus maximus" }],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "🏋️",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-013", "source": "fallback", "name": "Dumbbell Row",
+      "description": "Place one hand and knee on a bench. Hold a dumbbell with the other hand. Pull the weight up toward your hip, leading with your elbow. Lower with control.",
+      "category": { "id": 12, "name": "Back" },
+      "muscles": [{ "id": 12, "name": "Latissimus dorsi" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "💪",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-014", "source": "fallback", "name": "Dumbbell Shoulder Press",
+      "description": "Sit or stand with dumbbells at ear level, palms forward. Press the weights overhead until arms are extended. Lower slowly back to start.",
+      "category": { "id": 13, "name": "Shoulders" },
+      "muscles": [{ "id": 2, "name": "Anterior deltoid" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "⬆️",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-015", "source": "fallback", "name": "Resistance Band Pull Apart",
+      "description": "Hold a resistance band in front of you at shoulder height, hands shoulder-width apart. Pull the band apart until your arms are fully extended to the sides.",
+      "category": { "id": 12, "name": "Back" },
+      "muscles": [{ "id": 3, "name": "Posterior deltoid" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 11, "name": "Resistance band" }],
+      "imageUrl": null, "emoji": "↔️",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-016", "source": "fallback", "name": "Dumbbell Lunge",
+      "description": "Hold dumbbells at your sides. Step forward with one foot and lower until both knees are at 90°. Push back to standing. Alternate legs.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [{ "id": 8, "name": "Gluteus maximus" }],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "🦿",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-017", "source": "fallback", "name": "Dumbbell Chest Press",
+      "description": "Lie on your back with dumbbells at chest level, elbows bent. Press the weights up over your chest until arms are extended. Lower with control.",
+      "category": { "id": 11, "name": "Chest" },
+      "muscles": [{ "id": 4, "name": "Pectoralis major" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "🏋️",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-018", "source": "fallback", "name": "Resistance Band Squat",
+      "description": "Stand on a resistance band and hold both ends at shoulder level. Perform a squat, keeping tension in the band throughout the movement.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 11, "name": "Resistance band" }],
+      "imageUrl": null, "emoji": "🔴",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-019", "source": "fallback", "name": "Dumbbell Calf Raise",
+      "description": "Stand with dumbbells at your sides, feet hip-width apart. Rise up on your toes as high as possible. Pause, then lower slowly.",
+      "category": { "id": 14, "name": "Calves" },
+      "muscles": [{ "id": 7, "name": "Gastrocnemius" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "🦶",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-020", "source": "fallback", "name": "Dumbbell Lateral Raise",
+      "description": "Stand with dumbbells at your sides. Raise both arms out to the sides until they reach shoulder level. Lower slowly. Keep a slight bend in elbows.",
+      "category": { "id": 13, "name": "Shoulders" },
+      "muscles": [{ "id": 2, "name": "Lateral deltoid" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 3, "name": "Dumbbell" }],
+      "imageUrl": null, "emoji": "✈️",
+      "ageOk": true, "highImpact": false
+    }
+  ],
+  "outdoor": [
+    {
+      "id": "fb-021", "source": "fallback", "name": "Park Bench Step-Up",
+      "description": "Face a park bench. Step up with one foot, then the other, so you're standing on the bench. Step back down one foot at a time. Alternate the leading foot.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [{ "id": 8, "name": "Gluteus maximus" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🪵",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-022", "source": "fallback", "name": "Walking Lunge",
+      "description": "Step forward with one foot and lower into a lunge. Rise up and bring the back foot forward to a lunge on the other side. Continue walking forward.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [{ "id": 8, "name": "Gluteus maximus" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🚶",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-023", "source": "fallback", "name": "Incline Push-Up (Bench)",
+      "description": "Place hands on a park bench, shoulder-width apart. Perform a push-up at this inclined angle. The incline reduces difficulty and targets upper chest.",
+      "category": { "id": 11, "name": "Chest" },
+      "muscles": [{ "id": 4, "name": "Pectoralis major" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "📐",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-024", "source": "fallback", "name": "Sprint Interval",
+      "description": "Sprint at maximum effort for 20-30 seconds, then walk for 60 seconds. Repeat. Find an open path in a park or field.",
+      "category": { "id": 15, "name": "Cardio" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "💨",
+      "ageOk": false, "highImpact": true
+    },
+    {
+      "id": "fb-025", "source": "fallback", "name": "Bear Crawl",
+      "description": "Start on all fours with knees hovering 2 inches off the ground. Move forward by stepping right hand and left foot together, then left hand and right foot.",
+      "category": { "id": 10, "name": "Abs" },
+      "muscles": [{ "id": 6, "name": "Rectus abdominis" }],
+      "musclesSecondary": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🐻",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-026", "source": "fallback", "name": "Bench Dip",
+      "description": "Place hands on a park bench behind you with legs extended. Lower your body by bending elbows to 90°, then push back up.",
+      "category": { "id": 8, "name": "Arms" },
+      "muscles": [{ "id": 5, "name": "Triceps brachii" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🪑",
+      "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-027", "source": "fallback", "name": "Jump Rope (Imaginary)",
+      "description": "Mimic jump rope motion without a rope. Hop on both feet or alternate feet at a steady rhythm. Excellent low-cost cardio exercise outdoors.",
+      "category": { "id": 15, "name": "Cardio" },
+      "muscles": [{ "id": 7, "name": "Gastrocnemius" }],
+      "musclesSecondary": [],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "⭕",
+      "ageOk": true, "highImpact": true
+    },
+    {
+      "id": "fb-028", "source": "fallback", "name": "Lateral Shuffle",
+      "description": "Get into a half-squat stance. Shuffle quickly to one side for 5 steps, then shuffle back. Keep knees bent and stay low throughout.",
+      "category": { "id": 15, "name": "Cardio" },
+      "muscles": [{ "id": 8, "name": "Gluteus medius" }],
+      "musclesSecondary": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "↔️",
+      "ageOk": true, "highImpact": true
+    },
+    {
+      "id": "fb-029", "source": "fallback", "name": "Decline Push-Up (Bench)",
+      "description": "Place feet on a park bench and hands on the ground. Perform a push-up at this declined angle. Targets upper chest and shoulders.",
+      "category": { "id": 11, "name": "Chest" },
+      "muscles": [{ "id": 4, "name": "Pectoralis major" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "📉",
+      "ageOk": false, "highImpact": false
+    },
+    {
+      "id": "fb-030", "source": "fallback", "name": "Broad Jump",
+      "description": "Stand with feet shoulder-width apart. Swing arms and bend knees to load. Jump forward as far as possible, landing softly with bent knees.",
+      "category": { "id": 15, "name": "Cardio" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [{ "id": 8, "name": "Gluteus maximus" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🦘",
+      "ageOk": false, "highImpact": true
+    }
+  ],
+  "calisthenics": [
+    {
+      "id": "fb-031", "source": "fallback", "name": "Pull-Up",
+      "description": "Hang from a bar with hands slightly wider than shoulder-width, palms facing away. Pull yourself up until your chin clears the bar, then lower slowly with control.",
+      "category": { "id": 12, "name": "Back" },
+      "muscles": [{ "id": 12, "name": "Latissimus dorsi" }],
+      "musclesSecondary": [{ "id": 1, "name": "Biceps brachii" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "🏋️", "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-032", "source": "fallback", "name": "Chin-Up",
+      "description": "Hang from a bar with palms facing toward you, hands shoulder-width apart. Pull up until chin is above the bar, squeezing biceps at the top. Lower under control.",
+      "category": { "id": 8, "name": "Arms" },
+      "muscles": [{ "id": 1, "name": "Biceps brachii" }],
+      "musclesSecondary": [{ "id": 12, "name": "Latissimus dorsi" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "💪", "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-033", "source": "fallback", "name": "Parallel Bar Dip",
+      "description": "Support yourself on parallel bars with arms extended. Lower your body by bending elbows until upper arms are parallel to the ground. Press back up to full extension.",
+      "category": { "id": 11, "name": "Chest" },
+      "muscles": [{ "id": 4, "name": "Pectoralis major" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "🤸", "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-034", "source": "fallback", "name": "Hanging Knee Raise",
+      "description": "Hang from a bar with arms extended. Engage core and raise knees toward chest, then lower with control. Keep shoulders packed throughout.",
+      "category": { "id": 10, "name": "Abs" },
+      "muscles": [{ "id": 6, "name": "Rectus abdominis" }],
+      "musclesSecondary": [{ "id": 15, "name": "Hip flexors" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "🔄", "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-035", "source": "fallback", "name": "L-Sit Hold",
+      "description": "Support yourself on parallel bars or the floor. Extend legs straight in front of you, parallel to the ground, while keeping arms straight. Hold this position.",
+      "category": { "id": 10, "name": "Abs" },
+      "muscles": [{ "id": 6, "name": "Rectus abdominis" }],
+      "musclesSecondary": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "🅻", "ageOk": false, "highImpact": false, "timed": true
+    },
+    {
+      "id": "fb-036", "source": "fallback", "name": "Ring Push-Up",
+      "description": "Set gymnastics rings at chest height. Hold a ring in each hand, perform a push-up. The instability of the rings engages more stabilizer muscles than a regular push-up.",
+      "category": { "id": 11, "name": "Chest" },
+      "muscles": [{ "id": 4, "name": "Pectoralis major" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "⭕", "ageOk": false, "highImpact": false
+    },
+    {
+      "id": "fb-037", "source": "fallback", "name": "Australian Pull-Up (Inverted Row)",
+      "description": "Set a bar at waist height. Hang beneath it with heels on the ground, body straight. Pull your chest to the bar, then lower. Great pull-up progression.",
+      "category": { "id": 12, "name": "Back" },
+      "muscles": [{ "id": 12, "name": "Latissimus dorsi" }],
+      "musclesSecondary": [{ "id": 1, "name": "Biceps brachii" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "🔃", "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-038", "source": "fallback", "name": "Muscle-Up",
+      "description": "Begin with a pull-up. At the top, transition your grip and push up so arms extend above the bar. Requires significant strength and technique.",
+      "category": { "id": 12, "name": "Back" },
+      "muscles": [{ "id": 12, "name": "Latissimus dorsi" }, { "id": 4, "name": "Pectoralis major" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 6, "name": "Pull-up bar" }],
+      "imageUrl": null, "emoji": "🌟", "ageOk": false, "highImpact": false
+    },
+    {
+      "id": "fb-039", "source": "fallback", "name": "Pike Push-Up",
+      "description": "Start in a downward dog position with hips raised. Bend elbows to lower your head toward the floor between your hands, then push back up. Targets shoulders.",
+      "category": { "id": 13, "name": "Shoulders" },
+      "muscles": [{ "id": 2, "name": "Anterior deltoid" }],
+      "musclesSecondary": [{ "id": 5, "name": "Triceps brachii" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🔻", "ageOk": true, "highImpact": false
+    },
+    {
+      "id": "fb-040", "source": "fallback", "name": "Pistol Squat",
+      "description": "Stand on one leg, extend the other forward. Lower yourself on the standing leg until your hip is below the knee, then stand back up. Advanced single-leg squat.",
+      "category": { "id": 9, "name": "Legs" },
+      "muscles": [{ "id": 10, "name": "Quadriceps femoris" }],
+      "musclesSecondary": [{ "id": 8, "name": "Gluteus maximus" }],
+      "equipment": [{ "id": 7, "name": "Body weight" }],
+      "imageUrl": null, "emoji": "🔫", "ageOk": false, "highImpact": false
+    }
+  ]
+}
