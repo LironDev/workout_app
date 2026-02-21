@@ -55,36 +55,11 @@ function applyTheme() {
   const settings = storage.loadSettings();
   const theme    = settings.theme || 'system';
   if (theme === 'dark')  document.documentElement.setAttribute('data-theme', 'dark');
-  if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
 }
 
-/* ---- Language Toggle (global, shown in every view) ---- */
-function _buildLangToggle() {
-  const wrap = document.createElement('div');
-  wrap.id = 'global-lang-toggle';
-  wrap.style.cssText = `
-    position: fixed; bottom: calc(var(--nav-height) + 8px); left: 12px;
-    z-index: var(--z-overlay);
-  `;
-  wrap.innerHTML = `
-    <div class="lang-toggle lang-toggle--global" role="group" aria-label="Language">
-      <button class="lang-toggle__btn ${i18n.getLang()==='en'?'active':''}" data-lang="en">EN</button>
-      <button class="lang-toggle__btn ${i18n.getLang()==='he'?'active':''}" data-lang="he">עב</button>
-    </div>
-  `;
-  wrap.querySelectorAll('[data-lang]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      i18n.setLang(btn.dataset.lang);
-      // Update toggle active state
-      wrap.querySelectorAll('[data-lang]').forEach(b =>
-        b.classList.toggle('active', b.dataset.lang === i18n.getLang())
-      );
-      // Re-mount current view to apply translations
-      router.remount();
-    });
-  });
-  document.body.appendChild(wrap);
-}
+window._applyTheme = applyTheme;
 
 /* ---- Router Setup ---- */
 function setupRouter() {
@@ -142,7 +117,6 @@ async function initApp() {
   }
 
   setupConnectivityBanner();
-  _buildLangToggle();
   registerServiceWorker();
   _setupInstallPrompt();
 

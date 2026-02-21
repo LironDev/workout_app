@@ -190,6 +190,15 @@ const TRANSLATIONS = {
     /* ---- Units ---- */
     unitMetric:   'Metric',
     unitImperial: 'Imperial',
+
+    /* ---- Settings ---- */
+    settings:        'Settings',
+    settingsLang:    'Language',
+    settingsTheme:   'Appearance',
+    themeSystem:     'System',
+    themeLight:      'Light',
+    themeDark:       'Dark',
+    btnClose:        'Close',
   },
 
   he: {
@@ -375,6 +384,15 @@ const TRANSLATIONS = {
     /* ---- Units ---- */
     unitMetric:   'מטרי',
     unitImperial: 'אימפריאלי',
+
+    /* ---- Settings ---- */
+    settings:        'הגדרות',
+    settingsLang:    'שפה',
+    settingsTheme:   'מראה',
+    themeSystem:     'אוטומטי',
+    themeLight:      'בהיר',
+    themeDark:       'כהה',
+    btnClose:        'סגור',
   }
 };
 

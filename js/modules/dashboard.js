@@ -5,6 +5,7 @@
 import * as state from '../state.js';
 import * as storage from '../storage.js';
 import * as router from '../router.js';
+import { today } from '../models.js';
 import { generateOrLoadWorkout } from '../api.js';
 import * as gamification from './gamification.js';
 import { getOrGeneratePlan, sumLogged } from './nutrition.js';
@@ -12,6 +13,76 @@ import { avatarHTML, macroRingHTML, macroLegendHTML, xpBarHTML, streakHTML, skel
 import { icon } from '../ui/icons.js';
 import * as toast from '../ui/toast.js';
 import * as i18n from '../i18n.js';
+
+/* ---- Settings Modal ---- */
+function _openSettings() {
+  const existing = document.getElementById('settings-modal-overlay');
+  if (existing) { existing.remove(); return; }
+
+  const settings = storage.loadSettings();
+  const theme    = settings.theme || 'system';
+  const lang     = i18n.getLang();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'settings-modal-overlay';
+  overlay.innerHTML = `
+    <div class="settings-modal" role="dialog" aria-modal="true" aria-label="${i18n.t('settings')}">
+      <div class="settings-modal__header">
+        <span class="settings-modal__title">${i18n.t('settings')}</span>
+        <button class="settings-modal__close" id="settings-close" aria-label="${i18n.t('btnClose')}">✕</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">${i18n.t('settingsLang')}</div>
+        <div class="settings-toggle-group" role="group">
+          <button class="settings-toggle-btn ${lang==='en'?'active':''}" data-lang="en">🇺🇸 English</button>
+          <button class="settings-toggle-btn ${lang==='he'?'active':''}" data-lang="he">🇮🇱 עברית</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">${i18n.t('settingsTheme')}</div>
+        <div class="settings-toggle-group" role="group">
+          <button class="settings-toggle-btn ${theme==='system'?'active':''}" data-theme="system">🌓 ${i18n.t('themeSystem')}</button>
+          <button class="settings-toggle-btn ${theme==='light'?'active':''}" data-theme="light">☀️ ${i18n.t('themeLight')}</button>
+          <button class="settings-toggle-btn ${theme==='dark'?'active':''}" data-theme="dark">🌙 ${i18n.t('themeDark')}</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Close on overlay click
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  overlay.querySelector('#settings-close').addEventListener('click', () => overlay.remove());
+
+  // Language buttons
+  overlay.querySelectorAll('[data-lang]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      i18n.setLang(btn.dataset.lang);
+      // Clear today's cached workout so it regenerates with the new language
+      const profileId = state.getState('activeProfileId');
+      if (profileId) storage.saveWorkoutForDate(profileId, today(), null);
+      storage.clearApiCache();
+      overlay.remove();
+      router.remount();
+    });
+  });
+
+  // Theme buttons
+  overlay.querySelectorAll('[data-theme]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newTheme = btn.dataset.theme;
+      storage.saveSettings({ ...storage.loadSettings(), theme: newTheme });
+      if (window._applyTheme) window._applyTheme();
+      // Update active state without closing
+      overlay.querySelectorAll('[data-theme]').forEach(b =>
+        b.classList.toggle('active', b.dataset.theme === newTheme)
+      );
+    });
+  });
+
+  document.body.appendChild(overlay);
+}
 
 let _unsubscribers = [];
 
@@ -81,6 +152,7 @@ function _dashHTML(profile, profiles, activeId, gamData, logged, macroTgt) {
           <div style="display:flex;gap:var(--space-2);align-items:center">
             <button id="dash-install-btn" class="btn btn--icon" style="background:rgba(255,255,255,0.2);color:#fff;display:none" title="${i18n.t('btnInstall')}">${icon('install') || '📲'}</button>
             <button class="btn btn--icon" style="background:rgba(255,255,255,0.2);color:#fff" title="${i18n.t('badgesTitle')}" onclick="location.hash='#badges'">${icon('badges')}</button>
+            <button id="dash-settings-btn" class="btn btn--icon" style="background:rgba(255,255,255,0.2);color:#fff" title="${i18n.t('settings')}">⚙️</button>
           </div>
         </div>
         <div class="dashboard-header__stats">
@@ -287,6 +359,9 @@ function _bindEvents(section, profile, profiles, activeId) {
       if (window.triggerPWAInstall) window.triggerPWAInstall();
     });
   }
+
+  // Settings button
+  section.querySelector('#dash-settings-btn')?.addEventListener('click', _openSettings);
 }
 
 function _noProfileHTML() {

@@ -24,43 +24,6 @@ html[dir="rtl"] .step-nav .btn--back { transform: scaleX(-1); }
 html[dir="rtl"] .view-header__back svg { transform: scaleX(-1); }
 html[dir="rtl"] .bottom-nav__item { direction: rtl; }
 
-/* Language toggle pill */
-.lang-toggle {
-  display: inline-flex;
-  background: rgba(255,255,255,0.15);
-  border-radius: var(--radius-full);
-  padding: 3px;
-  gap: 2px;
-  border: none;
-  cursor: pointer;
-}
-.lang-toggle__btn {
-  padding: var(--space-1) var(--space-3);
-  border: none;
-  border-radius: var(--radius-full);
-  background: none;
-  font-size: var(--text-sm);
-  font-weight: var(--font-semibold);
-  cursor: pointer;
-  color: rgba(255,255,255,0.7);
-  transition: all var(--transition-fast);
-  letter-spacing: 0.03em;
-}
-.lang-toggle__btn.active {
-  background: rgba(255,255,255,0.25);
-  color: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-}
-
-/* Global lang toggle (fixed, shown on non-gradient backgrounds) */
-.lang-toggle--global {
-  background: var(--color-surface-alt);
-}
-.lang-toggle--global .lang-toggle__btn { color: var(--color-text-muted); }
-.lang-toggle--global .lang-toggle__btn.active {
-  background: var(--color-primary);
-  color: #fff;
-}
 
 body {
   font-family: var(--font-sans);

@@ -770,3 +770,100 @@
 .empty-state__icon { font-size: 4rem; line-height: 1; }
 .empty-state__title { font-size: var(--text-xl); font-weight: var(--font-bold); }
 .empty-state__desc { color: var(--color-text-muted); max-width: 280px; }
+
+/* ---- SETTINGS MODAL ---- */
+#settings-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: fadeIn var(--transition-base) ease;
+}
+
+.settings-modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl) var(--radius-xl) var(--radius-lg) var(--radius-lg);
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-5);
+  box-shadow: var(--shadow-lg);
+  animation: slideUp var(--transition-base) ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.settings-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.settings-modal__title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+}
+
+.settings-modal__close {
+  background: var(--color-surface-alt);
+  border: none;
+  border-radius: var(--radius-full);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  transition: background var(--transition-fast);
+}
+.settings-modal__close:hover { background: var(--color-border); }
+
+.settings-section {
+  margin-bottom: var(--space-5);
+}
+.settings-section:last-child { margin-bottom: 0; }
+
+.settings-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+}
+
+.settings-toggle-group {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.settings-toggle-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: var(--space-3) var(--space-3);
+  background: var(--color-surface-alt);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text);
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+.settings-toggle-btn:hover { border-color: var(--color-primary); }
+.settings-toggle-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}

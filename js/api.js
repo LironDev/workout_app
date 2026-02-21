@@ -4,6 +4,7 @@
 
 import * as storage from './storage.js';
 import { createExercise, createWorkoutPlan, today } from './models.js';
+import * as i18n from './i18n.js';
 
 const BASE_URL     = 'https://wger.de/api/v2';
 const LANG_EN      = 2;
@@ -159,12 +160,26 @@ async function getExercises(environment, categoryKey, equipmentIds) {
 async function _getFallbackExercises(environment, categoryKey) {
   const fallback = await _loadFallback();
   const fbKey    = FALLBACK_KEY_MAP[environment] || 'bodyweight';
-  const pool     = (fallback[fbKey] || fallback.bodyweight || []).map(ex => createExercise(ex));
+  const isHe     = i18n.getLang() === 'he';
+  const rawPool  = fallback[fbKey] || fallback.bodyweight || [];
+
+  // Filter on raw (English) category names before translation
   const cat      = categoryKey.toLowerCase();
-  const filtered = pool.filter(ex =>
-    ex.category.name.toLowerCase().includes(cat) || cat === 'cardio'
+  const rawFiltered = rawPool.filter(ex =>
+    (ex.category?.name || '').toLowerCase().includes(cat) || cat === 'cardio'
   );
-  return filtered.length > 0 ? filtered : pool;
+  const source   = rawFiltered.length > 0 ? rawFiltered : rawPool;
+
+  const pool = source.map(ex => {
+    const catName = isHe && ex.category?.name_he ? ex.category.name_he : ex.category?.name;
+    return createExercise({
+      ...ex,
+      name:        isHe && ex.name_he        ? ex.name_he        : ex.name,
+      description: isHe && ex.description_he ? ex.description_he : ex.description,
+      category:    { ...ex.category, name: catName }
+    });
+  });
+  return pool;
 }
 
 /* ---- Workout Plan Generation ---- */
