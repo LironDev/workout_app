@@ -151,7 +151,6 @@ function _renderSetupScreen(section, profile) {
         const key = btn.dataset.acc;
         if (selectedAcc.has(key)) selectedAcc.delete(key);
         else selectedAcc.add(key);
-        // Update chip visually without full re-render
         btn.classList.toggle('acc-chip--selected', selectedAcc.has(key));
       });
     });
@@ -208,58 +207,101 @@ function _renderLoading(section) {
   section.innerHTML = `
     <div class="loading-screen">
       <div class="spinner"></div>
-      <p class="text-muted">Building your workout...</p>
+      <p class="text-muted">${i18n.t('buildingWorkout')}</p>
     </div>
   `;
 }
 
+/* ---- Player: one exercise at a time ---- */
 function _renderPlayer(section, profile) {
   if (!_workout) return;
   const exercises = _workout.exercises || [];
   const completed = _workout.completed;
 
-  const envEmojis = { home_no_equipment: '🏠', home_gym: '🏋️', outdoor: '🌳', calisthenics: '🤸' };
-  const envEmoji  = envEmojis[_workout.environment] || '💪';
+  if (completed) {
+    _renderCompletePage(section);
+    return;
+  }
+
+  const idx = Math.min(_session.currentIdx, exercises.length - 1);
+  const ex  = exercises[idx];
 
   section.innerHTML = `
     <div class="workout-player">
-      <div class="workout-player__header">
-        <button class="btn btn--icon btn--ghost" id="wp-back">${icon('back')}</button>
-        <div class="workout-player__progress flex-1">
+      <!-- Top bar -->
+      <div class="workout-player__topbar">
+        <div class="workout-player__topbar-left">
+          <button class="btn btn--icon btn--ghost wp-topbar-btn" id="wp-exit" title="${i18n.t('exitWorkout')}">
+            ${icon('back')}
+          </button>
+        </div>
+        <div class="workout-player__topbar-center">
           <div class="workout-player__step-label">
-            ${completed ? `✅ ${i18n.t('workoutComplete')}` : `${i18n.t('navWorkout')} ${envEmoji} • ${Math.min(_session.currentIdx + 1, exercises.length)}/${exercises.length}`}
+            ${i18n.t('exerciseOf', idx + 1, exercises.length)}
           </div>
           <div class="progress-bar mt-1">
             <div class="progress-bar__fill" style="width:${_progressPct(exercises)}%"></div>
           </div>
         </div>
-        <button class="btn btn--sm btn--ghost" id="wp-refresh" title="Get new workout">${icon('refresh')}</button>
-      </div>
-
-      <div class="workout-exercise-list" id="wp-exercise-list">
-        ${exercises.map((ex, i) => _exerciseCardHTML(ex, i)).join('')}
-      </div>
-
-      ${completed ? _completeBannerHTML() : `
-        <div style="padding:var(--space-4);background:var(--color-surface);border-top:1px solid var(--color-border)">
-          <button class="btn btn--primary btn--full btn--lg" id="wp-complete-workout">
-            🏆 ${i18n.t('workoutComplete')}
-          </button>
+        <div class="workout-player__topbar-right">
+          <button class="btn btn--icon btn--ghost wp-topbar-btn" id="wp-settings" title="${i18n.t('settings')}">⚙️</button>
         </div>
-      `}
+      </div>
+
+      <!-- Exercise page -->
+      <div class="workout-exercise-page" id="wp-exercise-page">
+        ${_exercisePageHTML(ex, idx, exercises.length)}
+      </div>
+
+      <!-- Bottom nav: prev / next -->
+      <div class="workout-player__bottom-nav">
+        <button class="btn btn--ghost wp-nav-btn" id="wp-prev" ${idx === 0 ? 'disabled' : ''}>
+          ${i18n.t('btnPrev')}
+        </button>
+        <div class="wp-set-progress" id="wp-set-progress">
+          ${_setProgressDots(ex)}
+        </div>
+        ${idx < exercises.length - 1
+          ? `<button class="btn btn--primary wp-nav-btn" id="wp-next">${i18n.t('btnNextExercise')}</button>`
+          : `<button class="btn btn--success wp-nav-btn" id="wp-finish">🏆 ${i18n.t('btnFinishWorkout')}</button>`
+        }
+      </div>
     </div>
   `;
 
-  // Back
-  section.querySelector('#wp-back').addEventListener('click', () => {
+  // Exit → save state and go to dashboard
+  section.querySelector('#wp-exit').addEventListener('click', () => {
     _stopTimer();
+    state.setState({ workoutSession: _session });
     router.navigate('#dashboard');
   });
 
-  // Refresh workout
-  section.querySelector('#wp-refresh').addEventListener('click', () => {
+  // Settings → open settings modal
+  section.querySelector('#wp-settings').addEventListener('click', () => {
+    _openWorkoutSettings(section, profile);
+  });
+
+  // Prev exercise
+  section.querySelector('#wp-prev')?.addEventListener('click', () => {
+    if (_session.currentIdx > 0) {
+      _session.currentIdx--;
+      _stopTimer();
+      state.setState({ workoutSession: _session });
+      _renderPlayer(section, profile);
+    }
+  });
+
+  // Next exercise
+  section.querySelector('#wp-next')?.addEventListener('click', () => {
     _stopTimer();
-    _renderSetupScreen(section, profile);
+    _session.currentIdx = Math.min(_session.currentIdx + 1, exercises.length - 1);
+    state.setState({ workoutSession: _session });
+    _renderPlayer(section, profile);
+  });
+
+  // Finish workout
+  section.querySelector('#wp-finish')?.addEventListener('click', () => {
+    _finishWorkout(section, profile);
   });
 
   // Set check buttons
@@ -267,115 +309,122 @@ function _renderPlayer(section, profile) {
     btn.addEventListener('click', () => _toggleSet(btn, section, profile));
   });
 
-  // Complete workout button
-  section.querySelector('#wp-complete-workout')?.addEventListener('click', () => {
-    _finishWorkout(section, profile);
-  });
-
-  // Rest timer start buttons
+  // Rest timer
   section.querySelectorAll('[data-start-timer]').forEach(btn => {
     btn.addEventListener('click', () => {
       const secs = parseInt(btn.dataset.startTimer);
-      _startTimer(secs, section);
+      _startTimer(secs, section, ex.id);
     });
   });
 
-  // Scroll to current exercise
-  const currentCard = section.querySelector(`[data-ex-idx="${_session.currentIdx}"]`);
-  if (currentCard) currentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Input changes
+  section.querySelectorAll('.set-row__input').forEach(input => {
+    input.addEventListener('change', () => {
+      const exId    = input.dataset.exId;
+      const setIdx  = parseInt(input.dataset.setIdx);
+      const field   = input.dataset.field;
+      if (_session.sets[exId]?.[setIdx]) {
+        _session.sets[exId][setIdx][field] = parseFloat(input.value) || 0;
+        state.setState({ workoutSession: _session });
+      }
+    });
+  });
 }
 
-function _exerciseCardHTML(ex, idx) {
-  const sets       = _session.sets[ex.id] || [];
-  const isCurrent  = idx === _session.currentIdx;
-  const isComplete = sets.every(s => s.done);
-  const envEmoji   = ex.emoji || '💪';
-
-  let statusClass = '';
-  if (isComplete) statusClass = 'exercise-card__completed';
-  else if (isCurrent) statusClass = 'exercise-card__active';
+function _exercisePageHTML(ex, idx, total) {
+  const sets      = _session.sets[ex.id] || [];
+  const doneCount = sets.filter(s => s.done).length;
+  const isComplete = doneCount === sets.length;
+  const envEmoji  = ex.emoji || '💪';
 
   return `
-    <div class="exercise-card ${statusClass}" data-ex-idx="${idx}" id="ex-card-${ex.id}">
-      <div class="${ex.imageUrl ? '' : 'exercise-card__image-placeholder'}">
+    <div class="exercise-page">
+      <!-- Exercise image / emoji -->
+      <div class="exercise-page__media">
         ${ex.imageUrl
-          ? `<img src="${esc(ex.imageUrl)}" alt="${esc(ex.name)}" class="exercise-card__image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=exercise-card__image-placeholder style=height:200px>${envEmoji}</div>'">`
-          : `<span style="font-size:4rem">${envEmoji}</span>`
+          ? `<img src="${esc(ex.imageUrl)}" alt="${esc(ex.name)}" class="exercise-page__img" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=exercise-page__emoji>${envEmoji}</div>'">`
+          : `<div class="exercise-page__emoji">${envEmoji}</div>`
         }
       </div>
 
-      <div class="exercise-card__body">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-2)">
-          <h3 style="font-size:var(--text-lg)">${esc(ex.name)}</h3>
-          ${isComplete ? `<span class="tag tag--success">✓ Done</span>` : isCurrent ? '<span class="tag tag--primary">Current</span>' : ''}
-        </div>
-
-        ${ex.description ? `<p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-3)">${esc(ex.description.slice(0, 200))}${ex.description.length > 200 ? '…' : ''}</p>` : ''}
-
-        <div class="exercise-card__meta">
+      <!-- Exercise info -->
+      <div class="exercise-page__info">
+        <h2 class="exercise-page__name">${esc(ex.name)}</h2>
+        <div class="exercise-page__tags">
           <span class="tag">${ex.sets} ${i18n.t('labelSets')}</span>
           ${ex.durationSeconds
             ? `<span class="tag">⏱ ${ex.durationSeconds}${i18n.t('labelSecs')}</span>`
             : `<span class="tag">${ex.reps} ${i18n.t('labelReps')}</span>`
           }
-          <span class="tag">Rest ${ex.restSeconds}s</span>
+          <span class="tag">${i18n.t('labelRest')}: ${ex.restSeconds}${i18n.t('labelSecs')}</span>
           ${ex.category?.name ? `<span class="tag tag--primary">${esc(ex.category.name)}</span>` : ''}
-          <a href="${esc(ex.youtubeSearchUrl)}" target="_blank" rel="noopener" class="tag" style="text-decoration:none;cursor:pointer" title="Watch tutorial on YouTube">
+          <a href="${esc(ex.youtubeSearchUrl)}" target="_blank" rel="noopener" class="tag" style="text-decoration:none">
             <span style="color:#FF0000">▶</span> ${i18n.t('tutorial')}
           </a>
         </div>
+        ${ex.description ? `<p class="exercise-page__desc">${esc(ex.description.slice(0, 160))}${ex.description.length > 160 ? '…' : ''}</p>` : ''}
+      </div>
 
-        <!-- Set Tracker -->
-        <div class="set-tracker mt-3">
-          <div style="display:grid;grid-template-columns:40px 1fr 1fr 40px;gap:var(--space-2);font-size:var(--text-xs);color:var(--color-text-muted);padding-bottom:var(--space-2);border-bottom:1px solid var(--color-border)">
-            <span style="text-align:center">Set</span>
-            <span style="text-align:center">${ex.durationSeconds ? i18n.t('labelSecs') : i18n.t('labelReps')}</span>
-            <span style="text-align:center">${i18n.t('labelWeight')}</span>
-            <span></span>
-          </div>
-          ${sets.map((s, si) => `
-            <div class="set-row">
-              <span class="set-row__num">${si + 1}</span>
-              <input class="set-row__input" type="number" min="1" max="999"
-                value="${s.reps || (ex.durationSeconds || ex.reps)}"
-                data-ex-id="${ex.id}" data-set-idx="${si}" data-field="reps"
-                ${s.done ? 'readonly' : ''}>
-              <input class="set-row__input" type="number" min="0" step="0.5"
-                placeholder="BW" value="${s.weight || ''}"
-                data-ex-id="${ex.id}" data-set-idx="${si}" data-field="weight"
-                ${s.done ? 'readonly' : ''}>
-              <button class="set-row__check ${s.done ? 'done' : ''}"
-                data-set-check="${ex.id}" data-set-idx="${si}"
-                aria-label="${s.done ? 'Undo set' : 'Mark set done'}">
-                ${s.done ? icon('check') : ''}
-              </button>
-            </div>
-          `).join('')}
+      <!-- Set tracker -->
+      <div class="exercise-page__sets">
+        <div class="set-tracker-header">
+          <span>${i18n.t('setHeader')}</span>
+          <span>${ex.durationSeconds ? i18n.t('labelSecs') : i18n.t('labelReps')}</span>
+          <span>${i18n.t('labelWeightShort')}</span>
+          <span></span>
         </div>
-
-        <!-- Rest Timer -->
-        <div class="timer-container mt-3" id="timer-${ex.id}" style="${isCurrent && !isComplete ? '' : 'display:none'}">
-          <button class="btn btn--secondary btn--sm" data-start-timer="${ex.restSeconds}" data-ex-id="${ex.id}">
-            ⏱ ${i18n.t('labelRestTimer')} (${ex.restSeconds}s)
-          </button>
-          <div id="timer-ring-${ex.id}" style="display:none">
-            ${_timerRingHTML(ex.id, ex.restSeconds)}
+        ${sets.map((s, si) => `
+          <div class="set-row ${s.done ? 'set-row--done' : ''}">
+            <span class="set-row__num">${si + 1}</span>
+            <input class="set-row__input" type="number" min="1" max="999"
+              value="${s.reps || (ex.durationSeconds || ex.reps)}"
+              data-ex-id="${ex.id}" data-set-idx="${si}" data-field="reps"
+              ${s.done ? 'readonly' : ''}>
+            <input class="set-row__input" type="number" min="0" step="0.5"
+              placeholder="${i18n.t('bodyweightShort')}" value="${s.weight || ''}"
+              data-ex-id="${ex.id}" data-set-idx="${si}" data-field="weight"
+              ${s.done ? 'readonly' : ''}>
+            <button class="set-row__check ${s.done ? 'done' : ''}"
+              data-set-check="${ex.id}" data-set-idx="${si}"
+              aria-label="${s.done ? i18n.t('undoSet') : i18n.t('markSetDone')}">
+              ${s.done ? '✓' : ''}
+            </button>
           </div>
+        `).join('')}
+      </div>
+
+      <!-- Rest timer -->
+      <div class="exercise-page__timer" id="timer-wrap-${ex.id}">
+        <button class="btn btn--secondary btn--sm btn--full" id="timer-start-btn-${ex.id}" data-start-timer="${ex.restSeconds}" data-ex-id="${ex.id}">
+          ⏱ ${i18n.t('labelRestTimer')} (${ex.restSeconds}s)
+        </button>
+        <div id="timer-ring-${ex.id}" style="display:none;justify-content:center;margin-top:var(--space-3)">
+          ${_timerRingHTML(ex.id, ex.restSeconds)}
         </div>
       </div>
     </div>
   `;
 }
 
-function _completeBannerHTML() {
-  return `
-    <div class="workout-complete-banner">
-      <div class="workout-complete-banner__icon">🏆</div>
-      <div class="workout-complete-banner__title">${i18n.t('workoutComplete')}</div>
-      <p style="opacity:0.9;margin-top:8px">${i18n.t('workoutCompleteMsg')}</p>
-      <button class="btn btn--full mt-4" style="background:rgba(255,255,255,0.25);color:#fff;border:2px solid rgba(255,255,255,0.5)" onclick="location.hash='#dashboard'">
-        ${i18n.t('backToDashboard')}
-      </button>
+function _setProgressDots(ex) {
+  const sets = _session.sets[ex.id] || [];
+  return sets.map((s, i) => `
+    <div class="set-dot ${s.done ? 'set-dot--done' : ''}" title="${i18n.t('setHeader')} ${i + 1}"></div>
+  `).join('');
+}
+
+function _renderCompletePage(section) {
+  section.innerHTML = `
+    <div class="workout-complete-page">
+      <div class="workout-complete-page__content">
+        <div style="font-size:5rem">🏆</div>
+        <h2>${i18n.t('workoutComplete')}</h2>
+        <p class="text-muted">${i18n.t('workoutCompleteMsg')}</p>
+        <button class="btn btn--primary btn--full btn--lg mt-4" onclick="location.hash='#dashboard'">
+          ${i18n.t('backToDashboard')}
+        </button>
+      </div>
     </div>
   `;
 }
@@ -412,38 +461,72 @@ function _toggleSet(btn, section, profile) {
   const sets   = _session.sets[exId];
   if (!sets) return;
 
-  sets[setIdx].done = !sets[setIdx].done;
-
+  // Read input values before toggling
   const repsInput   = section.querySelector(`[data-ex-id="${exId}"][data-set-idx="${setIdx}"][data-field="reps"]`);
   const weightInput = section.querySelector(`[data-ex-id="${exId}"][data-set-idx="${setIdx}"][data-field="weight"]`);
   if (repsInput)   sets[setIdx].reps   = parseFloat(repsInput.value) || 0;
   if (weightInput) sets[setIdx].weight = parseFloat(weightInput.value) || 0;
 
-  const ex    = _workout.exercises.find(e => e.id === exId);
-  const exIdx = _workout.exercises.indexOf(ex);
-  if (sets.every(s => s.done) && exIdx >= _session.currentIdx) {
-    _session.currentIdx = Math.min(exIdx + 1, _workout.exercises.length - 1);
-    const timerContainer = section.querySelector(`#timer-${exId}`);
-    if (timerContainer) timerContainer.style.display = '';
-  }
+  sets[setIdx].done = !sets[setIdx].done;
 
   state.setState({ workoutSession: _session });
   storage.saveWorkoutForDate(profile.id, today(), { ..._workout, _session });
-  _renderPlayer(section, profile);
+
+  // Re-render just the exercise page content (not the whole player)
+  const exercises = _workout.exercises || [];
+  const idx = Math.min(_session.currentIdx, exercises.length - 1);
+  const ex  = exercises[idx];
+
+  const page = section.querySelector('#wp-exercise-page');
+  if (page) page.innerHTML = _exercisePageHTML(ex, idx, exercises.length);
+
+  // Update set progress dots
+  const dotsEl = section.querySelector('#wp-set-progress');
+  if (dotsEl) dotsEl.innerHTML = _setProgressDots(ex);
+
+  // Auto-advance currentIdx tracking (but don't navigate automatically)
+  const allDone = sets.every(s => s.done);
+  if (allDone) {
+    const exIdx = exercises.indexOf(exercises.find(e => e.id === exId));
+    if (exIdx >= _session.currentIdx) {
+      _session.currentIdx = Math.min(exIdx + 1, exercises.length - 1);
+    }
+  }
+
+  // Re-wire events after inner re-render
+  section.querySelectorAll('[data-set-check]').forEach(b => {
+    b.addEventListener('click', () => _toggleSet(b, section, profile));
+  });
+  section.querySelectorAll('[data-start-timer]').forEach(b => {
+    b.addEventListener('click', () => {
+      const secs = parseInt(b.dataset.startTimer);
+      _startTimer(secs, section, ex.id);
+    });
+  });
+  section.querySelectorAll('.set-row__input').forEach(input => {
+    input.addEventListener('change', () => {
+      const eId    = input.dataset.exId;
+      const sIdx   = parseInt(input.dataset.setIdx);
+      const field  = input.dataset.field;
+      if (_session.sets[eId]?.[sIdx]) {
+        _session.sets[eId][sIdx][field] = parseFloat(input.value) || 0;
+      }
+    });
+  });
 }
 
 /* ---- Rest Timer ---- */
-function _startTimer(totalSecs, section) {
+function _startTimer(totalSecs, section, exId) {
   _stopTimer();
 
-  const exId = section.querySelector('[data-start-timer]')?.dataset.exId;
-  section.querySelectorAll('[data-start-timer]').forEach(b => b.style.display = 'none');
-  const ring = exId ? section.querySelector(`#timer-ring-${exId}`) : null;
+  const startBtn = section.querySelector(`#timer-start-btn-${exId}`);
+  if (startBtn) startBtn.style.display = 'none';
+  const ring = section.querySelector(`#timer-ring-${exId}`);
   if (ring) ring.style.display = 'flex';
 
   const R = 46, C = 2 * Math.PI * R;
-  const circle = exId ? section.querySelector(`#timer-circle-${exId}`) : null;
-  const textEl = exId ? section.querySelector(`#timer-text-${exId}`) : null;
+  const circle = section.querySelector(`#timer-circle-${exId}`);
+  const textEl = section.querySelector(`#timer-text-${exId}`);
 
   _timerEnd    = performance.now() + totalSecs * 1000;
   _timerActive = true;
@@ -489,6 +572,64 @@ function _playBeep() {
       osc.stop(_audioCtx.currentTime + i * 0.15 + 0.25);
     });
   } catch (e) { /* Audio not available */ }
+}
+
+/* ---- Workout settings (mini modal inside workout) ---- */
+function _openWorkoutSettings(section, profile) {
+  const existing = document.getElementById('settings-modal-overlay');
+  if (existing) { existing.remove(); return; }
+
+  const settings = storage.loadSettings();
+  const theme    = settings.theme || 'system';
+  const lang     = i18n.getLang();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'settings-modal-overlay';
+  overlay.innerHTML = `
+    <div class="settings-modal" role="dialog" aria-modal="true">
+      <div class="settings-modal__header">
+        <span class="settings-modal__title">${i18n.t('settings')}</span>
+        <button class="settings-modal__close" id="settings-close">✕</button>
+      </div>
+      <div class="settings-section">
+        <div class="settings-label">${i18n.t('settingsLang')}</div>
+        <div class="settings-toggle-group">
+          <button class="settings-toggle-btn ${lang==='en'?'active':''}" data-lang="en">🇺🇸 English</button>
+          <button class="settings-toggle-btn ${lang==='he'?'active':''}" data-lang="he">🇮🇱 עברית</button>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-label">${i18n.t('settingsTheme')}</div>
+        <div class="settings-toggle-group">
+          <button class="settings-toggle-btn ${theme==='system'?'active':''}" data-theme="system">🌓 ${i18n.t('themeSystem')}</button>
+          <button class="settings-toggle-btn ${theme==='light'?'active':''}" data-theme="light">☀️ ${i18n.t('themeLight')}</button>
+          <button class="settings-toggle-btn ${theme==='dark'?'active':''}" data-theme="dark">🌙 ${i18n.t('themeDark')}</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  overlay.querySelector('#settings-close').addEventListener('click', () => overlay.remove());
+  overlay.querySelectorAll('[data-lang]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      i18n.setLang(btn.dataset.lang);
+      overlay.remove();
+      _renderPlayer(section, profile);
+    });
+  });
+  overlay.querySelectorAll('[data-theme]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newTheme = btn.dataset.theme;
+      storage.saveSettings({ ...storage.loadSettings(), theme: newTheme });
+      if (window._applyTheme) window._applyTheme();
+      overlay.querySelectorAll('[data-theme]').forEach(b =>
+        b.classList.toggle('active', b.dataset.theme === newTheme)
+      );
+    });
+  });
+
+  document.body.appendChild(overlay);
 }
 
 /* ---- Finish Workout ---- */
@@ -541,7 +682,7 @@ function _submitWorkout(profile, feedback, section) {
   state.setState({ workoutSession: null, todayWorkout: _workout });
 
   confetti(40);
-  _renderPlayer(section, profile);
+  _renderCompletePage(section);
 }
 
 export { mount, unmount };

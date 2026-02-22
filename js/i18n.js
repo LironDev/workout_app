@@ -114,8 +114,20 @@ const TRANSLATIONS = {
     labelSets:         'sets',
     labelReps:         'reps',
     labelSecs:         's',
+    labelRest:         'Rest',
     labelRestTimer:    'Start Rest Timer',
     labelWeight:       'Weight (kg)',
+    labelWeightShort:  'Weight',
+    setHeader:         'Set',
+    bodyweightShort:   'BW',
+    markSetDone:       'Mark set done',
+    undoSet:           'Undo set',
+    buildingWorkout:   'Building your workout…',
+    exitWorkout:       'Exit workout',
+    exerciseOf:        (n, t) => `Exercise ${n} of ${t}`,
+    btnPrev:           '← Prev',
+    btnNextExercise:   'Next →',
+    btnFinishWorkout:  'Finish Workout',
     feedbackTitle:     '🎉 Workout Complete!',
     feedbackPrompt:    "How was today's workout?",
     feedbackEasy:      'Too Easy',
@@ -199,6 +211,17 @@ const TRANSLATIONS = {
     themeLight:      'Light',
     themeDark:       'Dark',
     btnClose:        'Close',
+
+    /* ---- Onboarding validation ---- */
+    errEnterName:    'Please enter your name',
+    errEnterAge:     'Please enter a valid age (9–99)',
+    errEnterWeight:  'Please enter a valid weight',
+    errEnterHeight:  'Please enter a valid height',
+    errSelectFitness:'Please select your fitness level',
+    errSelectEnv:    'Please select your preferred workout environment',
+    namePlaceholder: 'e.g. Alex',
+    welcomeMsg:      (name) => `Welcome, ${name}! 🎉`,
+    profileReady:    'Your profile is ready.',
   },
 
   he: {
@@ -308,8 +331,20 @@ const TRANSLATIONS = {
     labelSets:          'סטים',
     labelReps:          'חזרות',
     labelSecs:          'שנ\'',
+    labelRest:          'מנוחה',
     labelRestTimer:     'התחל טיימר מנוחה',
     labelWeight:        'משקל (ק"ג)',
+    labelWeightShort:   'משקל',
+    setHeader:          'סט',
+    bodyweightShort:    'BW',
+    markSetDone:        'סמן סט כהושלם',
+    undoSet:            'בטל סט',
+    buildingWorkout:    'בונה את האימון שלך…',
+    exitWorkout:        'יציאה מהאימון',
+    exerciseOf:         (n, t) => `תרגיל ${n} מתוך ${t}`,
+    btnPrev:            'הקודם →',
+    btnNextExercise:    '← הבא',
+    btnFinishWorkout:   'סיים אימון',
     feedbackTitle:      '🎉 האימון הסתיים!',
     feedbackPrompt:     'איך היה האימון היום?',
     feedbackEasy:       'קל מדי',
@@ -393,6 +428,17 @@ const TRANSLATIONS = {
     themeLight:      'בהיר',
     themeDark:       'כהה',
     btnClose:        'סגור',
+
+    /* ---- Onboarding validation ---- */
+    errEnterName:    'אנא הכנס/י את שמך',
+    errEnterAge:     'אנא הכנס/י גיל תקין (9–99)',
+    errEnterWeight:  'אנא הכנס/י משקל תקין',
+    errEnterHeight:  'אנא הכנס/י גובה תקין',
+    errSelectFitness:'אנא בחר/י את רמת הכושר שלך',
+    errSelectEnv:    'אנא בחר/י סביבת אימון מועדפת',
+    namePlaceholder: 'לדוגמה: ירון',
+    welcomeMsg:      (name) => `ברוך/ה הבא/ה, ${name}! 🎉`,
+    profileReady:    'הפרופיל שלך מוכן.',
   }
 };
 
@@ -424,7 +470,7 @@ function t(key, ...args) {
 /** Load saved language preference */
 function init() {
   const settings = storage.loadSettings();
-  const saved    = settings.lang || 'en';
+  const saved    = settings.lang || 'he';
   setLang(saved);
 }
 

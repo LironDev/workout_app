@@ -35,6 +35,7 @@ function unmount() {
 
 /* ---- Scaffold ---- */
 function _scaffoldHTML() {
+  const lang = i18n.getLang();
   return `
     <div class="onboarding-layout">
       ${!_isAddMode ? `
@@ -42,6 +43,10 @@ function _scaffoldHTML() {
           <div class="onboarding-hero__logo">🏋️‍♂️</div>
           <h1 class="onboarding-hero__title">${i18n.t('appName')}</h1>
           <p class="onboarding-hero__subtitle">${i18n.t('appTagline')}</p>
+          <div class="onboarding-lang-toggle">
+            <button class="settings-toggle-btn ${lang==='he'?'active':''}" id="ob-lang-he">🇮🇱 עברית</button>
+            <button class="settings-toggle-btn ${lang==='en'?'active':''}" id="ob-lang-en">🇺🇸 English</button>
+          </div>
         </div>
       ` : `
         <div style="padding-top:var(--space-5)">
@@ -63,6 +68,16 @@ function _scaffoldHTML() {
 
 function _bindGlobal(section) {
   section.querySelector('#ob-cancel-add')?.addEventListener('click', () => router.navigate('#profiles'));
+
+  // Language toggle in hero
+  section.querySelector('#ob-lang-he')?.addEventListener('click', () => {
+    i18n.setLang('he');
+    mount({ addMode: _isAddMode });
+  });
+  section.querySelector('#ob-lang-en')?.addEventListener('click', () => {
+    i18n.setLang('en');
+    mount({ addMode: _isAddMode });
+  });
 }
 
 /* ---- Step Rendering ---- */
@@ -107,7 +122,7 @@ function _step1(container) {
     <div class="step-fields">
       <div class="form-group">
         <label class="form-label form-label--required" for="ob-name">${i18n.t('labelName')}</label>
-        <input class="form-input" id="ob-name" type="text" placeholder="e.g. Alex" maxlength="30" value="${_formData.name || ''}" autocomplete="given-name">
+        <input class="form-input" id="ob-name" type="text" placeholder="${i18n.t('namePlaceholder')}" maxlength="30" value="${_formData.name || ''}" autocomplete="given-name">
       </div>
       <div class="form-group">
         <label class="form-label form-label--required" for="ob-age">${i18n.t('labelAge')}</label>
@@ -139,8 +154,8 @@ function _step1(container) {
   container.querySelector('#ob-next-1').addEventListener('click', () => {
     const name = document.getElementById('ob-name').value.trim();
     const age  = parseInt(document.getElementById('ob-age').value);
-    if (!name) return _fieldError('ob-name', 'Please enter your name');
-    if (!age || age < 9 || age > 99) return _fieldError('ob-age', 'Please enter a valid age (9-99)');
+    if (!name) return _fieldError('ob-name', i18n.t('errEnterName'));
+    if (!age || age < 9 || age > 99) return _fieldError('ob-age', i18n.t('errEnterAge'));
     _formData.name = name;
     _formData.age  = age;
     if (!_formData.gender) _formData.gender = 'other';
@@ -208,17 +223,17 @@ function _step2(container) {
 
   document.getElementById('ob-next-2').addEventListener('click', () => {
     const wVal = parseFloat(document.getElementById('ob-weight').value);
-    if (!wVal || wVal < 20 || wVal > 500) return _fieldError('ob-weight', 'Please enter a valid weight');
+    if (!wVal || wVal < 20 || wVal > 500) return _fieldError('ob-weight', i18n.t('errEnterWeight'));
 
     let heightCm;
     if (!_useImperial) {
       heightCm = parseInt(document.getElementById('ob-height-cm').value);
-      if (!heightCm || heightCm < 60 || heightCm > 280) return _fieldError('ob-height-cm', 'Please enter a valid height (60–280 cm)');
+      if (!heightCm || heightCm < 60 || heightCm > 280) return _fieldError('ob-height-cm', i18n.t('errEnterHeight'));
     } else {
       const ft   = parseInt(document.getElementById('ob-height-ft').value) || 0;
       const inch = parseInt(document.getElementById('ob-height-in').value) || 0;
       heightCm   = Math.round((ft * 12 + inch) * 2.54);
-      if (heightCm < 60) return alert('Please enter a valid height');
+      if (heightCm < 60) return toast.warning(i18n.t('errEnterHeight'));
     }
 
     _formData.weight = _useImperial ? lbsToKg(wVal) : wVal;
@@ -273,7 +288,7 @@ function _step3(container) {
 
   container.querySelector('#ob-back-3').addEventListener('click', () => _back());
   container.querySelector('#ob-next-3').addEventListener('click', () => {
-    if (!_formData.fitnessLevel) return toast.warning('Please select your fitness level');
+    if (!_formData.fitnessLevel) return toast.warning(i18n.t('errSelectFitness'));
     _advance();
   });
 }
@@ -375,7 +390,7 @@ function _step5(container) {
 
   container.querySelector('#ob-back-5').addEventListener('click', () => _back());
   container.querySelector('#ob-next-5').addEventListener('click', () => {
-    if (!_formData.defaultEnvironment) return toast.warning('Please select your preferred workout environment');
+    if (!_formData.defaultEnvironment) return toast.warning(i18n.t('errSelectEnv'));
     _finish();
   });
 }
@@ -395,7 +410,7 @@ function _finish() {
   gamification.getOrInit(profile.id);
   state.setState({ activeProfileId: profile.id, profiles });
 
-  toast.success(`Welcome, ${profile.name}! 🎉`, 'Your profile is ready.');
+  toast.success(i18n.t('welcomeMsg', profile.name), i18n.t('profileReady'));
   router.navigate('#dashboard');
 }
 

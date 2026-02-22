@@ -50,7 +50,7 @@ function _render(section) {
 
       ${canAddMore ? `
         <button class="profiles-add-btn" id="add-profile-btn">
-          <span style="font-size:1.5rem">＋</span>
+          <span>+</span>
           <span>${i18n.t('addMember')}</span>
         </button>
       ` : `<p class="text-sm text-muted text-center">${i18n.t('maxProfiles')}</p>`}
